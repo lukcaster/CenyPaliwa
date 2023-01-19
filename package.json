@@ -6,18 +6,15 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lukcaster/playwright.git"
+    "url": "git+https://github.com/lukcaster/CenyPaliwa.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lukcaster/playwright/issues"
+    "url": "https://github.com/lukcaster/CenyPaliwa/issues"
   },
-  "homepage": "https://github.com/lukcaster/playwright#readme",
-  "devDependencies": {
-    "@playwright/test": "^1.27.0"
-  },
+  "homepage": "https://github.com/lukcaster/CenyPaliwa#readme",
   "dependencies": {
     "playwright": "^1.29.2"
   }
