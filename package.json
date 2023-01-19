@@ -17,5 +17,8 @@
   "homepage": "https://github.com/lukcaster/playwright#readme",
   "devDependencies": {
     "@playwright/test": "^1.27.0"
+  },
+  "dependencies": {
+    "playwright": "^1.29.2"
   }
 }
