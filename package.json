@@ -1,7 +1,6 @@
 {
   "name": "playwright",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {},
   "repository": {
@@ -16,6 +15,9 @@
   },
   "homepage": "https://github.com/lukcaster/CenyPaliwa#readme",
   "dependencies": {
-    "playwright": "^1.29.2"
-  }
+    "playwright": "^1.29.2",
+    "playwright-chromium": "^1.29.2",
+    "playwright-core": "^1.29.2"
+  },
+  "description": ""
 }

@@ -1,34 +1,44 @@
-const { chromium } = require('playwright');
-// import { setSearch } from './set-search';
-// TODO fix importing functions
+const { playwright, chromium } = require('playwright');
+const data = [];
 
     async function getPrices() {
-        var browser = await chromium.launch({
-            headless: false
-        });
+        var browser = await chromium.launch();
 
         var page = await browser.newPage();
+
+        await page.route('**/*.{png,jpg.jpeg}', route => route.abort());
+
         await page.goto('https://www.autocentrum.pl/stacje-paliw/');
 
-        await Promise.all([
-            page.waitForNavigation(),
-            page.getByRole('button', { name: 'AKCEPTUJĘ I PRZECHODZĘ DO SERWISU'}).click()
-        ]);
+        await page.getByRole('button', { name: 'AKCEPTUJĘ I PRZECHODZĘ DO SERWISU'}).click();
 
-        page.waitForTimeout(2000);
+        await page.route('**/*.{png,jpg.jpeg}', route => route.abort());
 
-        var searchField = await page.locator('.search-box').getByRole('input');
+        await page.getByPlaceholder('Wpisz nazwę lub adres stacji').click();
 
-        await searchField.fill('Kraków');
+        await page.keyboard.insertText('Kraków');
 
-        await Promise.all([
-            page.waitForNavigation(),
-            page.locator('.search-button').getByRole('button').click()
-        ]);
+        await page.keyboard.press('Enter');
 
-        expect(page).toHaveURL('https://www.autocentrum.pl/stacje-paliw/?s=1&order=&q=Krak%C3%B3w');
+        await page.route('**/*.{png,jpg.jpeg}', route => route.abort());
 
-        await page.selectOption('sort-select')
-    }
+        await page.locator('form').filter({ hasText: 'Szukaj' }).getByRole('button', { name: '' });
+
+        await page.getByRole('combobox').selectOption('lpg');
+
+        const prices = await page.$$eval('.station-item', wholeData => {
+            wholeData.forEach(price => {
+                const stationName = price.querySelector('.address').innerText;
+                const address = price.querySelector('.name.shorter').innerText;
+                const lpgPrice = price.querySelector('.petrol.lpg').innerText;
+                const lastUpdate = price.querySelector('.petrol.lpg').innerHTML;
+                data.push({ stationName, address, lpgPrice, lastUpdate });
+            })
+
+            return data;
+        });
+    console.log(prices);
+    console.log(prices.length);
+    }   
 
     getPrices();
