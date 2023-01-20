@@ -26,21 +26,32 @@ const playwright = require('playwright');
     await page.getByRole('combobox').selectOption('lpg');
 
     await page.waitForLoadState();
-
     const prices = await page.$$eval('.station-item', wholeData => {
         const data = [];
         wholeData.forEach(price => {
             const stationName = price.querySelector('.address').innerText;
             const address = price.querySelector('.name').innerText;
-            // const lpgPrice = price.querySelector('.petrols-wrapper .lpg').innerText;
-// TODO FIX LOCAOTRS
+            const petrol = price.getElementsByClassName('.petrol');
+
+            const petrolPrices = [];
+            for (var i = 0; i < petrol.length; i++) {
+                var value = petrol[i].innerText;
+                petrolPrices.push({value});
+            }
+
+            const abc = [];
+            for (const value of petrol.values()) {
+                abc.push({value})
+            }
             
-            // const lastUpdate = price.querySelector('.lpg').innerHTML;
-            data.push({ stationName, address, lpgPrice });
+            const lastUpdate = price.getAttribute('.petrol', 'title');
+            data.push({ stationName, address, petrolPrices, abc, lastUpdate });
+
         })
 
         return data;
     });
+    
     console.log(prices);
 
     await browser.close();
