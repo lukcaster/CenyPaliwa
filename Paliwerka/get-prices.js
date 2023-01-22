@@ -45,7 +45,8 @@ const playwright = require('playwright');
 
     });
     console.log(prices);
-    
+
+    //Todo add file saving and work on filters for different petrol
     await browser.close();
 })
     ();
