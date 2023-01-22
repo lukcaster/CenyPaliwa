@@ -28,27 +28,24 @@ const playwright = require('playwright');
     const prices = await page.$$eval('.station-item', wholeData => {
         const data = [];
         wholeData.forEach(price => {
-            const stationName = price.querySelector('.address').innerText;
-            const address = price.querySelector('.name').innerText;
-            const petrol = price.getElementsByClassName('petrol');
+            
+            const petrol = price.getElementsByClassName('petrol lpg');
 
-            const petrolPrices = [];
-            const lastUpdate = [];
+            
             for (var i = 0; i < petrol.length; i++) {
-                var value = petrol[i].innerText;
-                var title = petrol[i].getAttribute('title');
-                petrolPrices.push({ value });
-                lastUpdate.push({ title })
+                const stationName = price.querySelector('.address').innerText;
+                const address = price.querySelector('.name').innerText;
+                var petrolPrice = petrol[i].innerText;
+                var lastUpdatedOn = petrol[i].getAttribute('title');
+                data.push({ stationName, address, petrolPrice, lastUpdatedOn });
             }
-            data.push({ stationName, address });
-
-            data.concat(petrolPrices);
-
-            data.concat(lastUpdate);
+            
         })
-
         return data;
+
     });
+    console.log(prices);
+    
     await browser.close();
 })
     ();
