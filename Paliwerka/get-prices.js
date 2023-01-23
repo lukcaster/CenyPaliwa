@@ -1,7 +1,12 @@
 const playwright = require('playwright');
+const fs = require('fs');
 
 (async () => {
-    const browser = await playwright.chromium.launch();
+    const browser = await playwright.chromium.launch(
+        {
+            headless: false
+        }
+    );
 
     const page = await browser.newPage();
 
@@ -33,7 +38,6 @@ const playwright = require('playwright');
 
             const petrol = price.getElementsByClassName('petrol lpg');
 
-
             for (var i = 0; i < petrol.length; i++) {
                 const stationName = price.querySelector('.address').innerText;
                 const address = price.querySelector('.name').innerText;
@@ -47,6 +51,13 @@ const playwright = require('playwright');
 
     });
     console.log(prices);
+
+    var string = '';
+    for (const {stationName: a, address: b, petrolPrice: c, lastUpdatedOn: d} of prices) {
+        string += '{' + a + '}' + '\n' + '{' + b + '}' + '\n' + '{' + c + '}' + '\n' + '{' + d + '}' + '\n';
+    }
+
+    fs.writeFile('prices.md', string)
 
     //Todo add file saving and work on filters for different petrol
     await browser.close();
