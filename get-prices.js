@@ -1,5 +1,6 @@
 const playwright = require('playwright');
 const fs = require('fs');
+const path = require('path');
 
 (async () => {
     const browser = await playwright.chromium.launch(
@@ -14,7 +15,11 @@ const fs = require('fs');
 
     await page.getByRole('button', { name: 'AKCEPTUJĘ I PRZECHODZĘ DO SERWISU' }).click();
 
-    await page.waitForLoadState('load', { timeout: 1000000 });
+    await page.waitForTimeout(1000);
+
+    await page.reload();
+
+    await page.waitForLoadState('networkidle', { timeout: 1000000 });
 
     await page.getByPlaceholder('Wpisz nazwę lub adres stacji').click();
 
@@ -30,7 +35,7 @@ const fs = require('fs');
 
     await page.getByRole('combobox').selectOption('lpg');
 
-    await page.waitForLoadState('networkidle', { timeout: 1000000 } )
+    await page.waitForLoadState('networkidle', { timeout: 1000000 })
 
     const prices = await page.$$eval('.station-item', wholeData => {
         const data = [];
@@ -52,14 +57,21 @@ const fs = require('fs');
     });
     console.log(prices);
 
-    var string = '';
-    for (const {stationName: a, address: b, petrolPrice: c, lastUpdatedOn: d} of prices) {
-        string += '{' + a + '}' + '\n' + '{' + b + '}' + '\n' + '{' + c + '}' + '\n' + '{' + d + '}' + '\n';
+    var string = '| Station Name | Address | Price | Last Updated |' + '\n'
+        + '| -----------  | ------- | ----- | ------------ |' + '\n';
+    for (const { stationName: a, address: b, petrolPrice: c, lastUpdatedOn: d } of prices) {
+        string +=  '| ' + a + ' | '  + b  + ' | ' + c + ' | ' + d + ' |' + '\n';
     }
 
-    fs.writeFile('prices.md', string)
-
-    //Todo add file saving and work on filters for different petrol
+    fs.writeFile(path.join(__dirname + 'README.md'), string, (error) => {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log('File written successfully\n');
+            console.log('The written has the following contents:');
+            console.log(fs.readFileSync('README.md', 'utf8'));
+        }
+    })
     await browser.close();
 })
     ();
