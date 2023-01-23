@@ -19,7 +19,7 @@ const path = require('path');
 
     await page.reload();
 
-    await page.waitForLoadState('networkidle', { timeout: 1000000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 1000000 });
 
     await page.getByPlaceholder('Wpisz nazwę lub adres stacji').click();
 
@@ -27,7 +27,7 @@ const path = require('path');
 
     await page.keyboard.press('Enter');
 
-    await page.waitForLoadState('networkidle', { timeout: 1000000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 1000000 });
 
     await page.waitForTimeout(3000)
 
@@ -35,7 +35,7 @@ const path = require('path');
 
     await page.getByRole('combobox').selectOption('lpg');
 
-    await page.waitForLoadState('networkidle', { timeout: 1000000 })
+    await page.waitForLoadState('domcontentloaded', { timeout: 1000000 })
 
     const prices = await page.$$eval('.station-item', wholeData => {
         const data = [];
@@ -63,7 +63,7 @@ const path = require('path');
         string +=  '| ' + a + ' | '  + b  + ' | ' + c + ' | ' + d + ' |' + '\n';
     }
 
-    fs.writeFile(path.join(__dirname + 'README.md'), string, (error) => {
+    fs.writeFile('README.md', string, (error) => {
         if (error) {
             console.log(error)
         } else {
