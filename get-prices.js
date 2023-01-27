@@ -4,11 +4,7 @@ const path = require('path');
 
 (async () =>
 {
-    const browser = await playwright.chromium.launch(
-        {
-            headless: false
-        }
-    );
+    const browser = await playwright.chromium.launch();
 
     const page = await browser.newPage();
 
@@ -50,8 +46,8 @@ const path = require('path');
             {
                 const stationName = price.querySelector('.address').innerText;
                 const address = price.querySelector('.name').innerText;
-                var petrolPrice = petrol[i].innerText;
-                var lastUpdatedOn = petrol[i].getAttribute('title');
+                const petrolPrice = petrol[ i ].innerText;
+                const lastUpdatedOn = petrol[ i ].getAttribute('title');
                 data.push({ stationName, address, petrolPrice, lastUpdatedOn });
             }
 
